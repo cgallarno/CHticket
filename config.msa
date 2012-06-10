@@ -1,0 +1,9 @@
+*:/disticket [$] = >>>
+    try(
+        _ticket_dispatch(parse_args($)),
+    @ex,
+        msg(concat(color(red), 'Oops, an error occurred. Check the console!'))
+        console(@ex)
+    )
+<<<
+

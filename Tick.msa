@@ -1,0 +1,119 @@
+*:/ticket write $title $ = >>>
+    if(!_checkforperm('ticket.write')){die('You Dont Have Permissions')}
+    assign(@reports, get_value('report'))
+    if(_checkforperm('ticket.vip.write', false),
+        assign(@priority, 'high')
+        assign(@color, 'RED'),
+#      else
+        assign(@priority, 'Normal')
+        assign(@color, 'WHITE'))
+    array_push(@reports, array(
+      'player' : player(),
+      'Title' : $title,
+      'Location' : _nice_ploc(),
+      'report' : $,
+      'Priority' : @priority,
+      'color' : @color,
+      'Note' : 'No Notes'
+    ))
+    store_value('report', @reports)
+    msg('Report Written')
+    foreach(all_players(), @p, 
+        if(has_permission(@p, 'cgach.ticket.list'),
+            tmsg(@p, player() 'Wrote a ticket titled' @reports[subtract(array_size(@reports), 1)]['Title'])
+        )
+    )
+<<<
+ 
+*:/ticket view [$id=0] = >>>
+    if(!_checkforperm('ticket.view'),
+        die('You Dont Have Permissions'))
+    assign(@reports, get_value('report'))
+    assign(@id, floor(subtract($id, 1)))
+    if(!$id == 0,
+        try(@reports[@id], @e, die('That is an incorrect '.color(RED).'ID')),
+        die('That is an incorrect '.color(RED).'ID'))
+    msg('Report' $id '-' @reports[@id]['Title'])
+    msg('Priority - 'color(@reports[@id]['color']). @reports[@id]['Priority'])
+    msg('Submitted by :' @reports[@id]['player'])
+    msg('Description :' @reports[@id]['report'])
+    msg('Locaton :' @reports[@id]['Location'])
+    msg('Notes :' @reports[@id]['Note'])
+<<<
+
+*:/ticket list [$pagein=1] = >>>
+    if(!_checkforperm('ticket.list'),
+        die('You Dont Have Permissions'))
+    assign(@reports, get_value('report'))
+    if(array_size(@reports) == 0,
+        die('No Tickets'),
+        msg('Tickets:')
+    )
+    assign(@perpage, 5)
+    assign(@totalpages, ceil(divide(array_size(@reports), @perpage)))
+    if($pagein > @totalpages,
+        assign(@gotoPage, @totalpages),
+        assign(@gotoPage, $pagein)
+    )
+    assign(@thepage, _page(@reports, @perpage, @gotoPage))
+    assign(@key, multiply(subtract(@gotoPage, 1), @perpage))
+    foreach(@thepage, @report,
+      msg(add(@key, 1), ':'color(@report['color']). @report['Title']) @key++)
+    msg('Page' @gotoPage 'of' @totalpages)
+<<<
+
+*:/ticket delete [$id=0] = >>>
+    if(!_checkforperm('ticket.delete'),
+        die('You Dont Have Permissions'))
+    assign(@reports, get_value('report'))
+    assign(@id, floor(subtract($id, 1)))
+    if(!$id == 0,
+        try(@reports[@id], @e, die('That is an incorrect '.color(RED).'ID')),
+        die('That is an incorrect '.color(RED).'ID'))
+    msg('Deleting report' $id '-' @reports[@id][Title])
+    array_remove(@reports, @id)
+    store_value('report', @reports)
+    msg('Report Deleted')
+<<<
+
+*:/ticket tp [$id=0] = >>>
+    if(!_checkforperm('ticket.tp'),
+        die('You Dont Have Permissions'))
+    assign(@reports, get_value('report'))
+    assign(@id, floor(subtract($id, 1)))
+    if(!$id == 0,
+        try(@reports[@id], @e, die('That is an incorrect '.color(RED).'ID')),
+        die('That is an incorrect '.color(RED).'ID'))
+    msg('Teleporting to ticket' $id)
+    set_ploc(player(), @reports[@id]['Location'])
+<<<
+
+*:/ticket read [$id=0] = >>>
+    if(!_checkforperm('ticket.read'),
+        die('You Dont Have Permissions'))
+    call_alias('/chticket view' $id)
+    assign(@reports, get_value('report'))
+    assign(@id, floor(subtract($id, 1)))
+    if(!$id == 0,
+        try(@reports[@id], @e, die('That is an incorrect '.color(RED).'ID')),
+        die('That is an incorrect '.color(RED).'ID'))
+    assign(@reports[@id]['color'], 'BLUE')
+    store_value('report', @reports)
+    msg('Report Marked as Read')
+<<<
+
+*:/ticket note [$id=0] [$='<null>'] = >>>
+    if(!_checkforperm('ticket.note'),
+        die('You Dont Have Permissions'))
+    assign(@reports, get_value('report'))
+    assign(@id, floor(subtract($id, 1)))
+    if(!$id == 0,
+        try(@reports[@id], @e, die('That is an incorrect '.color(RED).'ID')),
+        die('That is an incorrect '.color(RED).'ID'))
+    if($ == '<null>',
+        msg(@reports[@id]['Note']),
+        assign(@reports[@id]['Note'], $)
+        msg('Note modifed to :'@reports[@id]['Note'])
+    )
+    store_value('report', @reports)
+<<<
