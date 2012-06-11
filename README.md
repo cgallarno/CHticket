@@ -5,13 +5,13 @@ Note: This README is set up for the planned versions of CHticket some of theese 
 
 Commands:
 	Required: < > Optional: [ ]
-	- /ticket write  '<title> <Description>' - Writes a ticket with the specified title & description. - Permission: CHticket.write
-	- /ticket read '<id>' - Views a ticket submitted with the specified id. - Permission: CHticket.read
+	- /ticket write  <title> <Description> - Writes a ticket with the specified title & description. - Permission: CHticket.write
+	- /ticket read <id> - Views a ticket submitted with the specified id. - Permission: CHticket.read
 	- /ticket list - Lists all tickets id's and title's. (these are color coded view color code section for what they mean) - Permission: CHticket.list
-	- /ticket delete '<id>' - Delete's a ticket with the specified id. (Does not confirm.) - Permission: CHticket.delete
-	- /ticket tp '<id>' - Teleport's to a ticket with the specified id. Permission: CHticket.teleport
-	- /ticket mark '<id>' '<status>' - Marks a Ticket's status. status can be open, closed, read, or important.
-	- /ticket note '<id>' '<note>' - Add's note's to a ticket with the specified id. (notes cannot be deleted. (by command)) - permission CHticket.note.add
+	- /ticket delete <id> - Delete's a ticket with the specified id. (Does not confirm.) - Permission: CHticket.delete
+	- /ticket tp <id> - Teleport's to a ticket with the specified id. Permission: CHticket.teleport
+	- /ticket mark <id> <status> - Marks a Ticket's status. status can be open, closed, read, or important.
+	- /ticket note <id> <note> - Add's note's to a ticket with the specified id. (notes cannot be deleted. (by command)) - permission CHticket.note.add
 
 Ticket Storage Tree:
 	- ACzChef.CHticket.tickets <Array of tickets(by id)>
